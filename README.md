@@ -5,7 +5,7 @@ A modern, user-friendly web application for downloading YouTube videos in variou
 ## Features
 
 - 🎥 Download YouTube videos in multiple quality options (up to Best Quality)
-- 🎵 Extract audio from videos
+- 🎵 Extract audio from videos (commming soon)
 - 📱 Mobile-friendly interface
 - 🔄 Smart format selection with recommended options
 - 🎯 Preset quality options (1080p, 720p)
@@ -16,7 +16,7 @@ A modern, user-friendly web application for downloading YouTube videos in variou
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/yayvd.git
+git clone https://github.com/thisispit/yayvd.git
 cd yayvd
 ```
 
