@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="nord-bg">
+    <div class="container nord-container">
+        <h1 class="nord-title">YouTube Video Downloader</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flashes">
+              {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <form method="POST" action="/">
+            <input type="text" name="url" placeholder="Enter YouTube URL" required class="nord-input">
+            <button type="submit" class="nord-btn">Fetch Video</button>
+        </form>
+    </div>
+</body>
+</html> 

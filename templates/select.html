@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAYVD - Yet Another YouTube Video Downloader</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+    function showAudioSelect() {
+        var type = document.getElementById('itag').selectedOptions[0].getAttribute('data-type');
+        var audioDiv = document.getElementById('audio_select_div');
+        if (type === 'video_only') {
+            audioDiv.style.display = 'block';
+        } else {
+            audioDiv.style.display = 'none';
+        }
+        document.getElementById('stream_type').value = type;
+    }
+    function showDownloading() {
+        document.getElementById('downloading-overlay').style.display = 'flex';
+    }
+    </script>
+</head>
+<body class="nord-bg">
+    <div class="container nord-container">
+        <h1 class="nord-title">YAYVD</h1>
+        <div class="nord-subtitle">Yet Another YouTube Video Downloader</div>
+        <h2 class="nord-video-title">{{ yt.title }}</h2>
+        <p class="nord-text">Select the quality to download:</p>
+        <form method="POST" action="/download" onsubmit="showDownloading()">
+            <input type="hidden" name="url" value="{{ url }}">
+            <input type="hidden" name="stream_type" id="stream_type" value="progressive">
+            <label for="itag" class="nord-label">Video Quality:</label>
+            <select name="itag" id="itag" required onchange="showAudioSelect()" class="nord-select">
+                {% for stream in progressive_streams %}
+                    <option value="{{ stream.itag }}" data-type="progressive">Video+Audio: {{ stream.resolution }} ({{ stream.mime_type }}, {{ stream.fps }}fps)</option>
+                {% endfor %}
+                {% for stream in video_streams %}
+                    <option value="{{ stream.itag }}" data-type="video_only">Video Only: {{ stream.resolution }} ({{ stream.mime_type }}, {{ stream.fps }}fps)</option>
+                {% endfor %}
+                {% for audio in audio_streams %}
+                    <option value="{{ audio.itag }}" data-type="audio_only">Audio Only: {{ audio.abr }} ({{ audio.mime_type }})</option>
+                {% endfor %}
+            </select>
+            <div id="audio_select_div" style="display:none; margin-bottom:12px;">
+                <label for="audio_itag" class="nord-label">Select Audio for Merge:</label>
+                <select name="audio_itag" id="audio_itag" class="nord-select">
+                    {% for audio in audio_streams %}
+                        <option value="{{ audio.itag }}">{{ audio.abr }} ({{ audio.mime_type }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="nord-btn">Download</button>
+        </form>
+        <a href="/" class="nord-link">Back</a>
+    </div>
+    <div id="downloading-overlay" class="downloading-overlay">
+        <div class="downloading-animation">
+            <div class="spinner"></div>
+            <div class="downloading-text">Downloading...</div>
+        </div>
+    </div>
+    <script>
+    // Set initial state
+    showAudioSelect();
+    </script>
+</body>
+</html> 
