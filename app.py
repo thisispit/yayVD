@@ -3,12 +3,17 @@ import os
 from pytubefix import YouTube
 import subprocess
 import uuid
+import re
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
 
 DOWNLOAD_FOLDER = os.path.join(os.getcwd(), 'downloads')
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
+
+def sanitize_filename(filename):
+    # Remove or replace characters not allowed in Windows filenames
+    return re.sub(r'[<>:"/\\|?*]', '_', filename)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -26,7 +31,7 @@ def index():
             return render_template('select.html', yt=yt, video_streams=video_streams, progressive_streams=progressive_streams, audio_streams=audio_streams, url=url)
         except Exception as e:
             flash(f'Error: {str(e)}', 'error')
-            return redirect(l_for('index'))
+            return redirect(url_for('index'))
     return render_template('index.html')
 
 @app.route('/download', methods=['POST'])
@@ -42,9 +47,9 @@ def download():
         yt = YouTube(url)
         if stream_type == 'progressive':
             stream = yt.streams.get_by_itag(itag)
-            filename = stream.default_filename
+            filename = sanitize_filename(stream.default_filename)
             filepath = os.path.join(DOWNLOAD_FOLDER, filename)
-            stream.download(output_path=DOWNLOAD_FOLDER)
+            stream.download(output_path=DOWNLOAD_FOLDER, filename=filename)
             return send_file(filepath, as_attachment=True)
         elif stream_type == 'video_only':
             video_stream = yt.streams.get_by_itag(itag)
@@ -75,9 +80,9 @@ def download():
             return send_file(output_path, as_attachment=True)
         elif stream_type == 'audio_only':
             stream = yt.streams.get_by_itag(itag)
-            filename = stream.default_filename
+            filename = sanitize_filename(stream.default_filename)
             filepath = os.path.join(DOWNLOAD_FOLDER, filename)
-            stream.download(output_path=DOWNLOAD_FOLDER)
+            stream.download(output_path=DOWNLOAD_FOLDER, filename=filename)
             return send_file(filepath, as_attachment=True)
         else:
             flash('Invalid stream type.', 'error')
