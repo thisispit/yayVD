@@ -1,5 +1,8 @@
 # Yet Another YouTube Video Downloader (YAYVD)
 
+<p align="center">
+  <img src="https://github.com/thisispit/yayVD/blob/master/assets/brave_ldBYmC9DQO.gif?raw=true" alt="YAYVD Demo" width="700"/>
+</p>
 A modern, user-friendly web application for downloading YouTube videos in various formats and qualities. Built with Flask and pytubefix.
 
 ## Features
