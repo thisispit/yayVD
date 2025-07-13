@@ -19,6 +19,8 @@ A modern, user-friendly web application for downloading YouTube videos in variou
 1. Clone the repository:
 ```bash
 git clone https://github.com/thisispit/yayvd.git
+```
+```bash
 cd yayvd
 ```
 
